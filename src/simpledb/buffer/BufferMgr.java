@@ -9,9 +9,9 @@ import simpledb.log.LogMgr;
  *
  */
 public class BufferMgr {
-   private Buffer[] bufferpool;
-   private int numAvailable;
-   private static final long MAX_TIME = 10000; // 10 seconds
+   protected Buffer[] bufferpool;
+   protected int numAvailable;
+   protected static final long MAX_TIME = 10000; // 10 seconds
    
    /**
     * Creates a buffer manager having the specified number 
@@ -84,7 +84,7 @@ public class BufferMgr {
       }
    }  
    
-   private boolean waitingTooLong(long starttime) {
+   protected boolean waitingTooLong(long starttime) {
       return System.currentTimeMillis() - starttime > MAX_TIME;
    }
    
@@ -97,7 +97,7 @@ public class BufferMgr {
     * @param blk a reference to a disk block
     * @return the pinned buffer
     */
-   private Buffer tryToPin(BlockId blk) {
+   protected Buffer tryToPin(BlockId blk) {
       Buffer buff = findExistingBuffer(blk);
       if (buff == null) {
          buff = chooseUnpinnedBuffer();
@@ -111,7 +111,7 @@ public class BufferMgr {
       return buff;
    }
    
-   private Buffer findExistingBuffer(BlockId blk) {
+   protected Buffer findExistingBuffer(BlockId blk) {
       for (Buffer buff : bufferpool) {
          BlockId b = buff.block();
          if (b != null && b.equals(blk))
@@ -120,7 +120,7 @@ public class BufferMgr {
       return null;
    }
    
-   private Buffer chooseUnpinnedBuffer() {
+   protected Buffer chooseUnpinnedBuffer() {
       for (Buffer buff : bufferpool)
          if (!buff.isPinned())
          return buff;
