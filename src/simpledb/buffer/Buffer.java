@@ -20,6 +20,7 @@ public class Buffer {
    private int pins = 0;
    private int txnum = -1;
    private int lsn = -1;
+   private int reference = 0;
 
    public Buffer(FileMgr fm, LogMgr lm) {
       this.fm = fm;
@@ -59,6 +60,13 @@ public class Buffer {
       return txnum;
    }
 
+   public int getReference() {
+      return reference;
+   }
+   public void resetReference() {
+      this.reference = 0;
+   }
+
    /**
     * Reads the contents of the specified block into
     * the contents of the buffer.
@@ -95,6 +103,7 @@ public class Buffer {
     * Decrease the buffer's pin count.
     */
    void unpin() {
+      reference++;
       pins--;
    }
 }

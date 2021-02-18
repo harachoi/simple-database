@@ -126,4 +126,8 @@ public class BufferMgr {
          return buff;
       return null;
    }
+
+   public int getNumBuffs() {
+      return bufferpool.length;
+   }
 }

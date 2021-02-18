@@ -1,6 +1,8 @@
 package simpledb.server;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+
 import simpledb.file.FileMgr;
 import simpledb.log.LogMgr;
 import simpledb.buffer.BufferMgr;
@@ -61,6 +63,26 @@ public class SimpleDB {
 //    UpdatePlanner up = new IndexUpdatePlanner(mdm);
       planner = new Planner(qp, up);
       tx.commit();
+   }
+
+   public BufferMgr setBufferMgr(String className) {
+      try {
+         Class[] argtypes = {
+                 FileMgr.class,
+                 LogMgr.class,
+                 Integer.TYPE
+         };
+         Class<? extends BufferMgr> newBufferMgr =
+                 (Class<? extends BufferMgr>) Class.forName("simpledb.buffer." + className);
+         this.bm = newBufferMgr.getDeclaredConstructor(argtypes).newInstance(this.fm, this.lm, this.bm.getNumBuffs());
+      } catch (InstantiationException |
+              IllegalAccessException |
+              InvocationTargetException |
+              NoSuchMethodException |
+              ClassNotFoundException e) {
+         e.printStackTrace();
+      }
+      return this.bm;
    }
    
    /**
