@@ -71,15 +71,15 @@ public class BufferMgr {
       try {
          long timestamp = System.currentTimeMillis();
          Buffer buff = tryToPin(blk);
-         while (buff == null && !waitingTooLong(timestamp)) {
-            wait(MAX_TIME);
-            buff = tryToPin(blk);
-         }
+//         while (buff == null && !waitingTooLong(timestamp)) {
+//            wait(MAX_TIME);
+//            buff = tryToPin(blk);
+//         }
          if (buff == null)
             throw new BufferAbortException();
          return buff;
       }
-      catch(InterruptedException e) {
+      catch(Exception e) {
          throw new BufferAbortException();
       }
    }  

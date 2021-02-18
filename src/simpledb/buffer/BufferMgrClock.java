@@ -27,7 +27,7 @@ public class BufferMgrClock extends BufferMgr {
             return null;
         }
         Buffer found = null;
-        for (int i = 0; i < bufferpool.length * 2; i++) {
+        while (found == null) {
             Buffer buf = bufferpool[bufferPointer];
             if (!buf.isPinned()) {
                 if (buf.getReference() == 0) {
