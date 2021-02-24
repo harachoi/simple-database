@@ -6,7 +6,9 @@ import simpledb.file.*;
 public class BufferMgrTest {
    public static void main(String[] args) throws Exception {
       SimpleDB db = new SimpleDB("buffermgrtest", 400, 3); // only 3 buffers
-      BufferMgr bm = db.bufferMgr();
+      //BufferMgr bm = db.bufferMgr();
+      BufferMgrLRU bm = db.bufferMgrLRU();
+
 
       Buffer[] buff = new Buffer[6]; 
       buff[0] = bm.pin(new BlockId("testfile", 0));
@@ -25,7 +27,6 @@ public class BufferMgrTest {
       }
       bm.unpin(buff[2]); buff[2] = null;
       buff[5] = bm.pin(new BlockId("testfile", 3)); // now this works
-
       System.out.println("Final Buffer Allocation:");
       for (int i=0; i<buff.length; i++) {
          Buffer b = buff[i];

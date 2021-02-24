@@ -2,6 +2,7 @@ package simpledb.buffer;
 
 import simpledb.file.*;
 import simpledb.log.LogMgr;
+import java.util.*;
 
 /**
  * Manages the pinning and unpinning of buffers to blocks.
@@ -10,8 +11,12 @@ import simpledb.log.LogMgr;
  */
 public class BufferMgr {
    protected Buffer[] bufferpool;
+   protected LinkedList<Buffer> pinnedList;
    protected int numAvailable;
    protected static final long MAX_TIME = 10000; // 10 seconds
+   protected HashMap<BlockId, Integer> pinnedMap;
+   protected HashSet<BlockId> pinnedSet;
+   protected int index;
    
    /**
     * Creates a buffer manager having the specified number 
@@ -22,9 +27,16 @@ public class BufferMgr {
     */
    public BufferMgr(FileMgr fm, LogMgr lm, int numbuffs) {
       bufferpool = new Buffer[numbuffs];
+      pinnedList = new LinkedList<>();
       numAvailable = numbuffs;
-      for (int i=0; i<numbuffs; i++)
+      pinnedMap = new HashMap<>();
+      pinnedSet = new HashSet<>(); 
+      index = 1;
+      for (int i=0; i<numbuffs; i++) {
          bufferpool[i] = new Buffer(fm, lm);
+         //pinnedList.add(bufferpool[i]);
+      }
+      
    }
    
    /**
@@ -55,6 +67,7 @@ public class BufferMgr {
       buff.unpin();
       if (!buff.isPinned()) {
          numAvailable++;
+         //pinnedList.add(buff);
          notifyAll();
       }
    }
@@ -71,10 +84,6 @@ public class BufferMgr {
       try {
          long timestamp = System.currentTimeMillis();
          Buffer buff = tryToPin(blk);
-//         while (buff == null && !waitingTooLong(timestamp)) {
-//            wait(MAX_TIME);
-//            buff = tryToPin(blk);
-//         }
          if (buff == null)
             throw new BufferAbortException();
          return buff;
@@ -99,10 +108,11 @@ public class BufferMgr {
     */
    protected Buffer tryToPin(BlockId blk) {
       Buffer buff = findExistingBuffer(blk);
-      if (buff == null) {
+      if (buff == null) { //space available
          buff = chooseUnpinnedBuffer();
-         if (buff == null)
+         if (buff == null) {
             return null;
+         }
          buff.assignToBlock(blk);
       }
       if (!buff.isPinned())
@@ -114,8 +124,9 @@ public class BufferMgr {
    protected Buffer findExistingBuffer(BlockId blk) {
       for (Buffer buff : bufferpool) {
          BlockId b = buff.block();
-         if (b != null && b.equals(blk))
+         if (b != null && b.equals(blk)) {
             return buff;
+         }
       }
       return null;
    }

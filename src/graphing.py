@@ -31,7 +31,7 @@ def graph(outputs, name):
 
 
 outputs = []
-with open("../project1out/tests/_testRandom-BufferMgrClock.txt", "r") as f:
+with open("../project1out/tests/_testRandom-BufferMgrLRU.txt", "r") as f:
     lines = f.readlines()
 
 i = 0
@@ -40,4 +40,4 @@ while i < len(lines):
     i += 2
 
 print(outputs[0].times)
-graph(outputs, "test random on BufferMgrClock")
+graph(outputs, "test random on BufferMgrLRU")

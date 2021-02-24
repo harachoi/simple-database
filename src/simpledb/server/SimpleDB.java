@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import simpledb.file.FileMgr;
 import simpledb.log.LogMgr;
 import simpledb.buffer.BufferMgr;
+import simpledb.buffer.BufferMgrLRU;
 import simpledb.tx.Transaction;
 import simpledb.metadata.MetadataMgr;
 import simpledb.plan.*;
@@ -27,6 +28,7 @@ public class SimpleDB {
    private  LogMgr      lm;
    private  MetadataMgr mdm;
    private  Planner planner;
+   private BufferMgrLRU lru;
 
    /**
     * A constructor useful for debugging.
@@ -39,6 +41,7 @@ public class SimpleDB {
       fm = new FileMgr(dbDirectory, blocksize);
       lm = new LogMgr(fm, LOG_FILE);
       bm = new BufferMgr(fm, lm, buffsize); 
+      lru = new BufferMgrLRU(fm, lm, buffsize);
    }
    
    /**
@@ -111,4 +114,7 @@ public class SimpleDB {
    public BufferMgr bufferMgr() {
       return bm;
    }   
+   public BufferMgrLRU bufferMgrLRU() {
+      return lru;
+   }
  }
