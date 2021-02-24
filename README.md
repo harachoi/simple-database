@@ -1,5 +1,3 @@
-# CS 448 Project 1 Important Changes
-
 ## BufferMgr.java
 - changed access modifiers of `private` member to `protected`
 - added method 
