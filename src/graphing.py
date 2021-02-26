@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
+TESTNAME = "testRandom"
+BUFFERMGR = "BufferMgrClock"
+FILENAME = f"../project1out/tests/_{TESTNAME}-{BUFFERMGR}.txt"
+
 class TestOutput:
     def __init__(self, bufferSize, times):
         self.bufferSize = bufferSize.replace("\n", "").replace("BUFFER_SIZE:", "")
@@ -31,7 +35,7 @@ def graph(outputs, name):
 
 
 outputs = []
-with open("../project1out/tests/_testRandom-BufferMgrLRU.txt", "r") as f:
+with open(FILENAME, "r") as f:
     lines = f.readlines()
 
 i = 0
@@ -39,5 +43,4 @@ while i < len(lines):
     outputs.append(TestOutput(lines[i], lines[i + 1]))
     i += 2
 
-print(outputs[0].times)
-graph(outputs, "test random on BufferMgrLRU")
+graph(outputs, f"{TESTNAME} on {BUFFERMGR}")
