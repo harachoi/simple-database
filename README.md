@@ -3,7 +3,7 @@
 - Gives three output files in project1out/tests
     - _testLoopRead-BufferMgrLRU.txt
     - _testPinSame-BufferMgrLRU.txt
-    - _testRandom-BufferMgrLru.txt
+    - _testRandom-BufferMgrLRU.txt
 
 ## Result of te data in to graph
 - Open graphing.py
