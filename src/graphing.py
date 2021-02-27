@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 TESTNAME = "testRandom"
-BUFFERMGR = "BufferMgrClock"
+BUFFERMGR = "BufferMgrLRU"
 FILENAME = f"../project1out/tests/_{TESTNAME}-{BUFFERMGR}.txt"
 
 class TestOutput:
